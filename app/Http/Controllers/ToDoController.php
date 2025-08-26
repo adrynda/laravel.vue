@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use DatetimeImmutable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ToDoController extends Controller
 {
@@ -22,7 +23,7 @@ class ToDoController extends Controller
 
     public function list()
     {
-        // $this->mockList();
+        $this->mockList();
         return response()->json($this->request->getSession()->get('todo.list', []));
     }
 
@@ -34,9 +35,26 @@ class ToDoController extends Controller
         $item['id'] = ++$id;
         $item['createdAt'] = (new DatetimeImmutable())->format('Y-m-d H:i:s');
         $list[] = $item;
+
         $this->request->getSession()->set('todo.list', $list);
         $this->request->getSession()->set('todo.id', $id);
-        return $this->json($item);
+
+        return response()->json($item);
+    }
+
+    public function delete()
+    {
+        $id = $this->request->getPayload()->getInt('id');
+        $list = $this->request->getSession()->get('todo.list', []);
+        $newList = array_filter($list, fn($item) => $item['id'] !== $id);
+
+        if ($list === $newList) {
+            throw new NotFoundHttpException("Todo not found");
+        }
+
+        $this->request->getSession()->set('todo.list', $newList);
+
+        return response()->json(null, 204);
     }
 
     private function mockList(): void

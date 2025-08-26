@@ -20,6 +20,8 @@
     import Item from './Item.vue';
     import axios from "axios";
 
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     export default {
         components: {
             Form,
@@ -32,7 +34,16 @@
         },
         methods: {
             removeItem(itemId) {
-                this.items = this.items.filter(item => item.id !== itemId);
+                axios
+                    .delete('todo/delete', {
+                        data: { id: itemId }
+                    })
+                    .then((response)  => {
+                        if (response.status === 204) {
+                            this.items = this.items.filter(item => item.id !== itemId);
+                        }
+                    })
+                ;
             },
             addItem(newItem) {
                 axios

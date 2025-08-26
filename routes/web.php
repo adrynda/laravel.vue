@@ -15,3 +15,4 @@ Route::get('/todo', function () {
 // Route::get('/todo', [\App\Http\Controllers\ToDoController::class, 'index']);
 Route::get('/todo/list', [\App\Http\Controllers\ToDoController::class, 'list']);
 Route::post('/todo/create', [\App\Http\Controllers\ToDoController::class, 'create']);
+Route::delete('/todo/delete', [\App\Http\Controllers\ToDoController::class, 'delete']);
