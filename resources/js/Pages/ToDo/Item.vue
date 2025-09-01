@@ -2,7 +2,8 @@
     <li>
         <h3>
             {{ localItem.title }} ({{ formatDate(localItem.dueDate) }})
-            <button @click="toggleComplete">{{ !localItem.completed ? 'Ukończ' : 'Przywróć' }}</button>
+            <a :href="'/todo/edit/' + localItem.id">Edycja</a>
+            <!-- <button @click="toggleComplete">{{ !localItem.completed ? 'Ukończ' : 'Przywróć' }}</button> -->
             <button @click="$emit('remove', localItem.id)">Usuń</button>
         </h3>
         <p>

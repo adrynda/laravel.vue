@@ -5,47 +5,52 @@
             placeholder="Tytuł"
             :assertion="{ regex: /^.{3,}$/, message: 'Minimum 3 znaki' }"
             ref="titleField"
-            v-model="title"
+            v-model="item.title"
             @validation="fieldValid.title = $event"
         />
         <InputDatetimeField
             label="Data realizacji"
             ref="dueDateField"
-            :assertion="{ regex: /^.{1,}$/, message: 'Pole nie może być puste' }"
-            v-model="dueDate"
+            v-model="item.dueDate"
             @validation="fieldValid.dueDate = $event"
         />
         <SelectField
             label="Priorytet"
             placeholder="Priorytet"
-            :options="[
-                { value: 'low', label: 'Niski' },
-                { value: 'medium', label: 'Średni' },
-                { value: 'high', label: 'Wysoki' }
-            ]"
+            :options="priorities"
             ref="priorityField"
             :assertion="{ regex: /^.{1,}$/, message: 'Pole nie może być puste' }"
-            v-model="priority"
+            v-model="item.priority"
             @validation="fieldValid.priority = $event"
         />
-        <InputTextField
+        <SelectField
             label="Kategoria"
             placeholder="Kategoria"
-            :assertion="{ regex: /^.{3,}$/, message: 'Minimum 3 znaki' }"
+            :options="categories"
             ref="categoryField"
-            v-model="category"
+            :assertion="{ regex: /^.{1,}$/, message: 'Pole nie może być puste' }"
+            v-model="item.category"
             @validation="fieldValid.category = $event"
+        />
+        <SelectField
+            label="Statusy"
+            placeholder="Statusy"
+            :options="statuses"
+            ref="statusField"
+            :assertion="{ regex: /^.{1,}$/, message: 'Pole nie może być puste' }"
+            v-model="item.status"
+            @validation="fieldValid.status = $event"
         />
         <TextareaField
             label="Notatki"
             placeholder="Notatki"
             :assertion="{ regex: /^.{1,}$/, message: 'Pole nie może być puste' }"
             ref="notesField"
-            v-model="notes"
+            v-model="item.notes"
             @validation="fieldValid.notes = $event"
         />
-        <button @click="create">Dodaj</button>
-        <button @click="clear">Wyczyść</button>
+        <button @click="submit">Zapisz</button>
+        <a href="/todo">Wróć</a>
     </div>
 </template>
 
@@ -54,6 +59,7 @@
     import InputDatetimeField from '../../Components/FormFields/InputDatetimeField.vue';
     import SelectField from '../../Components/FormFields/SelectField.vue';
     import TextareaField from '../../Components/FormFields/TextareaField.vue';
+    import axios from 'axios';
 
 
 
@@ -64,69 +70,122 @@
             SelectField,
             TextareaField,
         },
+        props: {
+            user: Object,
+            id: [Number, null],
+        },
         data() {
             return {
-                title: null,
-                completed: false,
-                dueDate: null,
-                priority: null,
-                category: null,
-                notes: null,
+                item: {
+                    dueDate: null,
+                    title: null,
+                    priority: null,
+                    category: null,
+                    status: null,
+                    notes: null,
+                    user: `/api/users/${this.user.id}`,
+                },
                 fieldValid: {
                     title: false,
                     dueDate: false,
                     priority: false,
                     category: false,
+                    status: false,
                     notes: false,
                 },
                 errors: [],
+                categories: [],
+                priorities: [],
+                statuses: [],
             }
         },
         methods: {
-            clear() {
-                this.$refs.titleField.reset();
-                this.$refs.dueDateField.reset();
-                this.$refs.priorityField.reset();
-                this.$refs.categoryField.reset();
-                this.$refs.notesField.reset();
+            loadPriorities() {
+                this.priorities = [
+                    { value: 'low', label: 'Niski' },
+                    { value: 'medium', label: 'Średni' },
+                    { value: 'high', label: 'Wysoki' }
+                ];
             },
-            create() {
+            loadCategories() {
+                axios
+                    .get('/api/to_do_categories')
+                    .then(response => {
+                        this.categories = []
+                        response.data.forEach(cat => {
+                            this.categories.push({ value: `/api/to_do_categories/${cat.id}`, label: cat.name });
+                        });
+                    })
+            },
+            loadStatuses() {
+                axios
+                    .get('/api/to_do_statuses')
+                    .then(response => {
+                        this.statuses = []
+                        response.data.forEach(stat => {
+                            this.statuses.push({ value: `/api/to_do_statuses/${stat.id}`, label: stat.name });
+                        });
+                    })
+            },
+            loadItem() {
+                if (!this.id) {
+                    return;
+                }
+                axios
+                    .get('/api/to_dos/' + this.id)
+                    .then(response => {
+                        this.item = response.data;
+                    })
+            },
+            submit() {
                 if (!this.isFormValid()) {
                     alert("Formularz zawiera błędy!");
                     return;
                 }
-                
-                const newItem = {
-                    id: null,
-                    title: this.title,
-                    dueDate: new Date(this.dueDate),
-                    priority: this.priority,
-                    category: this.category,
-                    notes: this.notes,
-                    completed: this.completed,
-                    // createdAt: new Date(),
-                };
-                
-                this.$emit('add', newItem);
-                this.clear();
+
+                this.item.dueDate = new Date(this.item.dueDate);
+                delete this.item.createdAt;
+                delete this.item.updatedAt;
+                delete this.item.id;
+
+                if (this.id) {
+                    this.update();
+                } else {
+                    this.create();
+                }
             },
             isFormValid() {
                 this.$refs.titleField.validate();
                 this.$refs.dueDateField.validate();
                 this.$refs.priorityField.validate();
                 this.$refs.categoryField.validate();
+                this.$refs.statusField.validate();
                 this.$refs.notesField.validate();
                 
                 return Object.values(this.fieldValid).every(v => v === true);
             },
-        },
-        computed: {
-            validateField(field) {
-                if (typeof item[field] !== this.assertions[field]) {
-                    isValid = false;
-                    this.errors[field] = `Invalid type for field ${field}, expected ${this.assertions[assertion]}, got ${typeof item[assertion]}`;
-                }
+            create() {
+                axios
+                    .post('/api/to_dos', this.item)
+                    .then((response)  => {
+                        window.location.href = '/todo/edit/' + response.data.id;
+                    })
+                ;
             },
+            update() {
+                axios
+                    .patch('/api/to_dos/' + this.id, this.item)
+                    .then((response)  => {
+                        window.location.reload();
+                    })
+                ;
+            },
+        },
+        mounted() {
+            this.loadPriorities();
+            this.loadCategories();
+            this.loadStatuses();
+            this.loadItem();
         }
     }
 </script>

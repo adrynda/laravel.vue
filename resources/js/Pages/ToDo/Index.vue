@@ -1,6 +1,9 @@
 <template>
     <div class="mx-[30%] mt-[2%]">
-      <Form @add="addItem" />
+      <!-- <Form @add="addItem" /> -->
+       <div>
+            <a href="todo/create">Dodaj</a>
+       </div>
       <ul>
           <Item
               v-for="item in items"
@@ -16,7 +19,7 @@
 </template>
 
 <script>
-    import Form from './Form.vue';
+    // import Form from './Form.vue';
     import Item from './Item.vue';
     import axios from "axios";
 
@@ -24,7 +27,7 @@
 
     export default {
         components: {
-            Form,
+            // Form,
             Item
         },
         data() {
@@ -64,7 +67,7 @@
             },
             getItems() {
                 axios
-                    .get('todo/list')
+                    .get('api/to_dos')
                     .then(response => (this.loadItems(response.data)))
                 ;
             }
