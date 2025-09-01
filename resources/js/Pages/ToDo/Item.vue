@@ -3,8 +3,7 @@
         <h3>
             {{ localItem.title }} ({{ formatDate(localItem.dueDate) }})
             <a :href="'/todo/edit/' + localItem.id">Edycja</a>
-            <!-- <button @click="toggleComplete">{{ !localItem.completed ? 'Ukończ' : 'Przywróć' }}</button> -->
-            <button @click="$emit('remove', localItem.id)">Usuń</button>
+            <button @click="remove">Usuń</button>
         </h3>
         <p>
             {{ localItem.notes }}
@@ -14,6 +13,8 @@
 </template>
 
 <script>
+    import axios from "axios";
+
     export default {
         name: 'Item',
         props: {
@@ -49,9 +50,16 @@
                 const ii = String(date.getMinutes()).padStart(2, '0')
                 return `${dd}.${mm}.${yyyy} ${hh}:${ii}`
             },
-            toggleComplete() {
-                this.localItem.completed = !this.localItem.completed
-            }
+            remove() {
+                axios
+                    .delete('/api/to_dos/' + this.localItem.id)
+                    .then((response)  => {
+                        if (response.status === 204) {
+                            this.$emit('remove', this.localItem.id);
+                        }
+                    })
+                ;
+            },
         }
     }
 </script>
@@ -63,12 +71,12 @@
         margin: 5px;
         &:hover {
             background-color: #ddd;
-            button {
+            a, button {
                 float: right;
                 display: unset;
             }
         }
-        button {
+        a, button {
             display: none;
         }
     }
