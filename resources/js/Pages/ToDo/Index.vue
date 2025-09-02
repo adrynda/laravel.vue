@@ -42,7 +42,7 @@
         data() {
             return {
                 items: [],
-                showFilters: true,
+                showFilters: false,
             }
         },
         methods: {
