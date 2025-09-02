@@ -1,5 +1,5 @@
 <template>
-    <div class="form">
+    <div class="mx-auto mt-4 w-[50%] border-b border-white/10 pb-12 bg-orange-50 p-4 rounded-xl space-x-2 space-y-2">
         <InputTextField
             label="Tytuł"
             placeholder="Tytuł"
@@ -49,8 +49,18 @@
             v-model="item.notes"
             @validation="fieldValid.notes = $event"
         />
-        <button @click="submit">Zapisz</button>
-        <a href="/todo">Wróć</a>
+        <button
+            class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            @click="submit"
+        >
+            Zapisz
+        </button>
+        <a
+            class="cursor-pointer bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            href="/todo"
+        >
+            Wróć
+        </a>
     </div>
 </template>
 
@@ -189,15 +199,3 @@
         }
     }
 </script>
-
-<style scoped>
-    div.form {
-        border: 1px solid #ddd;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: #f0f0f0;
-    }
-    button {
-        padding: 5px 10px;
-    }
-</style>

@@ -1,52 +1,73 @@
 <template>
-    <div class="form">
-        <InputTextField
-            label="Tytuł"
-            placeholder="Tytuł"
-            ref="titleField"
-            v-model="query.title"
-        />
-        <InputDatetimeField
-            label="Data realizacji"
-            ref="dueDateField"
-            v-model="query.dueDate"
-        />
-        <SelectField
-            label="Użytkownik"
-            placeholder="Użytkownik"
-            :options="users"
-            ref="userField"
-            v-model="query.user"
-        />
-        <SelectField
-            label="Priorytet"
-            placeholder="Priorytet"
-            :options="priorities"
-            ref="priorityField"
-            v-model="query.priority"
-        />
-        <SelectField
-            label="Kategoria"
-            placeholder="Kategoria"
-            :options="categories"
-            ref="categoryField"
-            v-model="query.category"
-        />
-        <SelectField
-            label="Statusy"
-            placeholder="Statusy"
-            :options="statuses"
-            ref="statusField"
-            v-model="query.status"
-        />
-        <TextareaField
-            label="Notatki"
-            placeholder="Notatki"
-            ref="notesField"
-            v-model="query.notes"
-        />
-        <button @click="submit">Szukaj</button>
-        <button @click="clear">Wyczyść</button>
+    <div class="border-b border-white/10 pb-12 bg-orange-50 p-4 rounded-xl space-x-2 space-y-2">
+        <div
+            class="flex flex-wrap gap-4 mb-4"
+        >
+            <InputTextField
+                class="w-[30%]"
+                label="Tytuł"
+                placeholder="Tytuł"
+                ref="titleField"
+                v-model="query.title"
+            />
+            <InputDatetimeField
+                class="w-[30%]"
+                label="Data realizacji"
+                ref="dueDateField"
+                v-model="query.dueDate"
+            />
+            <SelectField
+                class="w-[30%]"
+                label="Użytkownik"
+                placeholder="Użytkownik"
+                :options="users"
+                ref="userField"
+                v-model="query.user"
+            />
+            <SelectField
+                class="w-[30%]"
+                label="Priorytet"
+                placeholder="Priorytet"
+                :options="priorities"
+                ref="priorityField"
+                v-model="query.priority"
+            />
+            <SelectField
+                class="w-[30%]"
+                label="Kategoria"
+                placeholder="Kategoria"
+                :options="categories"
+                ref="categoryField"
+                v-model="query.category"
+            />
+            <SelectField
+                class="w-[30%]"
+                label="Statusy"
+                placeholder="Statusy"
+                :options="statuses"
+                ref="statusField"
+                v-model="query.status"
+            />
+            <TextareaField
+                class="w-[30%]"
+                label="Notatki"
+                placeholder="Notatki"
+                ref="notesField"
+                v-model="query.notes"
+            />
+        </div>
+        <button
+            @click="submit"
+            class="inline-flex items-center justify-center cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+            Szukaj
+        </button>
+        <button
+            @click="clear"
+            class="inline-flex items-center justify-center cursor-pointer bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+        >
+            Wyczyść
+        </button>
     </div>
 </template>
 
@@ -147,15 +168,3 @@
         }
     }
 </script>
-
-<style scoped>
-    div.form {
-        border: 1px solid #ddd;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: #f0f0f0;
-    }
-    button {
-        padding: 5px 10px;
-    }
-</style>

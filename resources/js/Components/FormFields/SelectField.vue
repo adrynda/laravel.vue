@@ -1,7 +1,18 @@
 <template>
-    <div class="form-field">
-        <label for="{{ fieldId }}">{{ label }}</label>
-        <select id="{{ fieldId }}" v-model="value">
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-1 rounded-xl border border-orange-200 p-2">
+        <label :for="fieldId" class="font-medium">{{ label }}</label>
+        <!-- <select :id="fieldId" v-model="value" class="m-1 border-b border-b-orange-200 focus:bg-white appearance-none rounded focus:ring transition-all"> -->
+        <select
+            class="
+                border-b border-b-orange-200 bg-none
+                px-2 py-1
+                hover:border-b-4
+                transition-all duration-300 ease-in-out
+                focus:bg-white
+            "
+            :id="fieldId"
+            v-model="value" 
+        >
             <option disabled value="">{{ placeholder }}</option>
             <option
                 v-for="(option, index) in options"

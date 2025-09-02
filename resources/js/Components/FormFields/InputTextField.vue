@@ -1,7 +1,13 @@
 <template>
-    <div class="form-field">
-        <label :for="fieldId">{{ label }}</label>
-        <input type="text" :id="fieldId" v-model="value" :placeholder="placeholder" />
+    <div class="grid grid-cols-1 gap-3 md:grid-cols-1 rounded-xl border border-orange-200 p-2">
+        <label :for="fieldId" class="font-medium">{{ label }}</label>
+        <input
+            type="text"
+            class="m-1 border-b border-b-orange-200 focus:bg-white focus:p-2 focus:border-b-4 focus-visible:outline-none transition-all duration-300 ease-in-out hover:border-b-4"
+            :id="fieldId"
+            v-model="value"
+            :placeholder="placeholder"
+        />
         <span class="error" v-if="isValid === false">{{ assertion.message }}</span>
     </div>
 </template>
@@ -58,19 +64,3 @@
         }
     }
 </script>
-
-<style scoped>
-    div.form-field {
-        margin-bottom: 10px;
-        input {
-            display: block;
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
-            resize: vertical;
-        }
-        span.error {
-            color: red;
-        }
-    }
-</style>
