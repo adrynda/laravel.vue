@@ -1,23 +1,20 @@
 <template>
-    <div class="border-b border-white/10 pb-12 bg-orange-50 p-4 rounded-xl space-x-2 space-y-2">
+    <div class="search-form">
         <div
-            class="flex flex-wrap gap-4 mb-4"
+            class="flex flex-wrap gap-4 mb-4 w-full"
         >
             <InputTextField
-                class="w-[32%]"
                 label="Tytuł"
                 placeholder="Tytuł"
                 ref="titleField"
                 v-model="query.title"
             />
             <InputDatetimeField
-                class="w-[32%]"
                 label="Data realizacji"
                 ref="dueDateField"
                 v-model="query.dueDate"
             />
             <SelectField
-                class="w-[32%]"
                 label="Użytkownik"
                 placeholder="Użytkownik"
                 :options="users"
@@ -25,7 +22,6 @@
                 v-model="query.user"
             />
             <SelectField
-                class="w-[32%]"
                 label="Priorytet"
                 placeholder="Priorytet"
                 :options="priorities"
@@ -33,7 +29,6 @@
                 v-model="query.priority"
             />
             <SelectField
-                class="w-[32%]"
                 label="Kategoria"
                 placeholder="Kategoria"
                 :options="categories"
@@ -41,7 +36,6 @@
                 v-model="query.category"
             />
             <SelectField
-                class="w-[32%]"
                 label="Statusy"
                 placeholder="Statusy"
                 :options="statuses"
@@ -49,7 +43,6 @@
                 v-model="query.status"
             />
             <TextareaField
-                class="w-[32%]"
                 label="Notatki"
                 placeholder="Notatki"
                 ref="notesField"

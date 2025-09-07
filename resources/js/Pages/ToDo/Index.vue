@@ -1,30 +1,29 @@
 <template>
-    <div class="mx-auto mt-4 w-[50%]">
-        <a
-            href="todo/create"
-            class="inline-flex items-center justify-center cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-        >
-            Dodaj
-        </a>
-        <button
-            @click="toggleShowFilters"
-            class="inline-flex items-center justify-center cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-            {{ showFilters ? 'Ukryj filtry' : 'Pokaż filtry' }}
-        </button>
+    <div class="content">
+        <ul class="list-box">
+            <Item
+                v-for="item in items"
+                :key="item.id"
+                :item="item"
+                @remove="removeItem"
+            />
+            <li v-if="items.length === 0">
+                Brak zadań do wykonania.
+            </li>
+        </ul>
+        <div class="list-box-aside">
+            <div class="list-box-aside-item secondary-bg-color">
+                <a href="todo/create" class="btn btn-add">
+                    Dodaj
+                </a>
+                <button @click="toggleShowFilters" class="btn btn-main">
+                    {{ showFilters ? 'Ukryj filtry' : 'Pokaż filtry' }}
+                </button>
+
+            </div>
+            <Search v-if="showFilters" class="list-box-aside-item secondary-bg-color" @search="loadItems" />
+        </div>
     </div>
-    <Search v-if="showFilters" @search="loadItems" class="mx-auto mt-4 w-[50%]" />
-    <ul class="mx-auto mt-4 w-[50%] border-b border-white/10 pb-12 bg-orange-50 p-4 rounded-xl space-x-2 space-y-2">
-        <Item
-            v-for="item in items"
-            :key="item.id"
-            :item="item"
-            @remove="removeItem"
-        />
-        <li v-if="items.length === 0">
-            Brak zadań do wykonania.
-        </li>
-    </ul>
 </template>
 
 <script>
@@ -42,7 +41,7 @@
         data() {
             return {
                 items: [],
-                showFilters: false,
+                showFilters: true,
             }
         },
         methods: {
@@ -63,7 +62,6 @@
                         });
                     })
                 ;
-                
             },
             toggleShowFilters() {
                 this.showFilters = !this.showFilters;

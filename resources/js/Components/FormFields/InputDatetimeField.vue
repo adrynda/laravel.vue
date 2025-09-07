@@ -1,9 +1,9 @@
 <template>
-    <div class="grid grid-cols-1 gap-3 md:grid-cols-1 rounded-xl border border-orange-200 p-2">
-        <label :for="fieldId" class="font-medium">{{ label }}</label>
+    <div class="form-field-box">
+        <label :for="fieldId" class="form-field-box-label">{{ label }}</label>
         <input
             type="datetime-local"
-            class="m-1 border-b border-b-orange-200 focus:bg-white focus:p-2 focus:border-b-4 focus-visible:outline-none transition-all duration-300 ease-in-out hover:border-b-4"
+            class="form-field-box-input"
             :id="fieldId"
             v-model="value"
         />
